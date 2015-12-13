@@ -12,12 +12,17 @@ public class CargoCombo {
 	
 	public CargoCombo(Cargo cargo) {
 		this.cargoList = new ArrayList<>();
-		cargoList.add(cargo);
-		updateTotalWeightAndCost();
+		if (cargo != null ) {
+			cargoList.add(cargo);
+			updateTotalWeightAndCost();
+		}		
 	}
 	
 	public CargoCombo(List<Cargo> cargoList) {
 		this.cargoList = cargoList;
+		if (cargoList == null ) {
+			this.cargoList = new ArrayList<>();
+		}
 		updateTotalWeightAndCost();
 	}
 	
@@ -32,6 +37,17 @@ public class CargoCombo {
 		return true;
 	}
 	
+	public Cargo removeLastCargoItem() {
+		if (cargoList == null || cargoList.isEmpty() ) {
+			return null;
+		}
+		
+		Cargo item = cargoList.remove(cargoList.size() - 1);
+		totalWeight -= item.getWeight();
+		totalCost -= item.getCost();
+		return item;
+	}
+	
 	private void updateTotalWeightAndCost() {
 		totalWeight = cargoList.stream().mapToInt(c -> c.getWeight()).sum();
 		totalCost = cargoList.stream().mapToInt(c -> c.getCost()).sum();
@@ -43,5 +59,9 @@ public class CargoCombo {
 	
 	public int getTotalCost() {
 		return totalCost;
+	}
+	
+	public List getCargo() {
+		return cargoList;
 	}
 }

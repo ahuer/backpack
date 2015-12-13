@@ -9,27 +9,39 @@ import com.points.backpack.CargoCombo
 class CargoComboTest {
 	
 	@Test
-	public void testCargoComboTotalWeight() {
+	public void testGetTotalWeight() {
 		def cargoList = [new Cargo("bag", 5, 30), new Cargo("suitcase", 7, 45)]
 		def cargoCombo = new CargoCombo(cargoList)
 		assertEquals(12, cargoCombo.getTotalWeight())
 	}
 	
 	@Test
-	public void testCargoComboTotalCost() {
+	public void testGetTotalCost() {
 		def cargoList = [new Cargo("bag", 5, 30), new Cargo("suitcase", 7, 45)]
 		def cargoCombo = new CargoCombo(cargoList)
 		assertEquals(75, cargoCombo.getTotalCost())
 	}
 	
 	@Test
-	public void testAddToCargoCombo() {
+	public void testGetCargo() {
 		def cargoList = [new Cargo("bag", 5, 30), new Cargo("suitcase", 7, 45)]
 		def cargoCombo = new CargoCombo(cargoList)
-		
-		assertEquals(true, cargoCombo.addToCargoCombo(new Cargo("box", 4, 20)))
-		assertEquals(16, cargoCombo.getTotalWeight())
-		assertEquals(95, cargoCombo.getTotalCost())
+		assertEquals(cargoList, cargoCombo.getCargo())
+	}
+	
+	@Test
+	public void testAddToCargoCombo() {
+		def cargoCombo = new CargoCombo(new Cargo("bag", 5, 30))
+		assertEquals(true, cargoCombo.addToCargoCombo(new Cargo("suitcase", 7, 45)))
+		assertEquals(12, cargoCombo.getTotalWeight())
+		assertEquals(75, cargoCombo.getTotalCost())
+	}
+	
+	@Test
+	public void testRemoveLastCargoItem() {
+		def cargoList = [new Cargo("bag", 5, 30), new Cargo("suitcase", 7, 45)]
+		def cargoCombo = new CargoCombo(cargoList)
+		assertEquals(new Cargo("suitcase", 7, 45), cargoCombo.removeLastCargoItem())
 	}
 
 }

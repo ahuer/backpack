@@ -9,11 +9,11 @@ import java.util.List;
 
 public class Manifest {
 	private int weightToLose;
-	private List<Cargo> cargoAboardPlane;
+	private CargoCombo cargoAboardPlane;
 	
 	private Manifest() {}
 	
-	public Manifest(int weightToLose, List<Cargo> cargoAboardPlane) {
+	public Manifest(int weightToLose, CargoCombo cargoAboardPlane) {
 		this.weightToLose = weightToLose;
 		this.cargoAboardPlane = cargoAboardPlane;
 		
@@ -22,8 +22,11 @@ public class Manifest {
 		}
 	}
 	
-	public List<Cargo> getCargoAboardPlane() {
-		return cargoAboardPlane;
+	public List getCargoAboardPlane() {
+		if (cargoAboardPlane == null ) {
+			return null;
+		}
+		return cargoAboardPlane.getCargo();
 	}
 	
 	public int getWeightToLose() {
@@ -68,7 +71,7 @@ public class Manifest {
 			return null;
 		}
 		
-		return new Manifest(weightOverLimit, cargoList);
+		return new Manifest(weightOverLimit, new CargoCombo(cargoList));
 	}
 	
 	

@@ -9,7 +9,6 @@ import com.points.backpack.Manifest
 class ManifestTest {
 	private String testFile1 = "src/test/groovy/com/points/backpack/manifest1.txt"
 	
-	
 	@Test
 	public void testCreateManifest() {
 		def cargoList = [new Cargo("box", 7, 20)]

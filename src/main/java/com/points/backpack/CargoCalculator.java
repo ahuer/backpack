@@ -1,12 +1,13 @@
 package com.points.backpack;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class CargoCalculator {
 	private CargoCombo cargoCandidate;
 	private Manifest manifest;
 	private List<Cargo> cargoAboardPlane;
+	private CargoCombo currentCombo;
 	
 	private CargoCalculator() {}
 	
@@ -21,41 +22,65 @@ public class CargoCalculator {
 		
 		cargoAboardPlane = manifest.getCargoAboardPlane();
 		
-		if (cargoAboardPlane == null ) {
+		if (cargoAboardPlane == null || cargoAboardPlane.size() < 1 ) {
 			return null;
 		}
 		
-		CargoCombo currentCargo = new CargoCombo(cargoAboardPlane.get(0));
+		currentCombo = new CargoCombo(cargoAboardPlane.get(0));
 		
-		return recursiveCalcuate(currentCargo);
+		return recursiveCalcuate();
 	}
 	
-	private CargoCombo recursiveCalcuate(CargoCombo currentCargo) {
+	private CargoCombo recursiveCalcuate() {
 		
-		 
-		/* for (Cargo item : cargoAboard ) {
-			if (cargoComboStack.isEmpty() ) {			
-				cargoComboStack.push(new CargoCombo(item));
-			}
-			
-			CargoCombo newCombo = cargoComboStack.peek();
-			newCombo.addToCargoCombo(item);
-			
-			if (newCombo.getTotalWeight() > manifest.getWeightToLose() ) {
-				if (cargoToDrop == null ) {
-					cargoToDrop = newCombo;
-				}
-				
-				if (newCombo.getTotalCost() < cargoToDrop.getTotalCost() ) {
-					cargoToDrop = newCombo;
-				}
-				continue;
-			}
-			cargoComboStack.push(newCombo);
-			recursiveCalcuate(cargoAboard, cargoComboStack);
+		if (currentCombo.getCargo().isEmpty() ) {
+			return cargoCandidate;
 		}
-		*/
-		return null;
+		
+		if (cargoCandidate != null && currentCombo.getTotalCost() > cargoCandidate.getTotalCost() ) {
+			popAndAddNext(true);
+			recursiveCalcuate();
+		}
+		
+		if (currentCombo.getTotalWeight() > manifest.getWeightToLose() ) {
+			if (cargoCandidate == null ) {
+				cargoCandidate = new CargoCombo(currentCombo.getCargo());
+			}
+			
+			if (currentCombo.getTotalCost() < cargoCandidate.getTotalCost() ) {
+				cargoCandidate = new CargoCombo(currentCombo.getCargo());
+			}
+			popAndAddNext(true);
+			recursiveCalcuate();
+		}
+		
+		popAndAddNext(false);
+		recursiveCalcuate();
+		
+		return cargoCandidate;
+	}
+	
+	private void popAndAddNext(boolean doPop) {
+		if (currentCombo == null || currentCombo.getCargo() == null || currentCombo.getCargo().isEmpty() ) {
+			return;
+		}
+		
+		int nextCargoIndex;
+		
+		if (doPop ) {
+			Cargo lastItem = currentCombo.removeLastCargoItem();
+			nextCargoIndex = cargoAboardPlane.indexOf(lastItem) + 1;
+		} else {
+			List<Cargo> cargoList = currentCombo.getCargo();
+			Cargo lastItem = cargoList.get(cargoList.size() - 1);
+			nextCargoIndex = cargoAboardPlane.indexOf(lastItem);
+		}		
+				
+		if (nextCargoIndex < cargoAboardPlane.size() ) {
+			currentCombo.addToCargoCombo(cargoAboardPlane.get(nextCargoIndex));
+		} else {
+			popAndAddNext(true);
+		}
 	}
 	
 

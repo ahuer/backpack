@@ -37,4 +37,20 @@ public class Cargo {
 		return cost;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null ) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+	        return false;
+	    }
+		
+	    final Cargo c = (Cargo)obj;
+		if (sku == c.sku && weight == c.weight && cost == c.cost ) {
+			return true;
+		}
+		return false;
+	}
+	
 }
