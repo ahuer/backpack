@@ -1,6 +1,5 @@
 package com.points.backpack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CargoCalculator {
@@ -81,6 +80,33 @@ public class CargoCalculator {
 		} else {
 			popAndAddNext(true);
 		}
+	}
+	
+	public static void main(String[] args) {
+		if (args.length < 1 || args.length > 1 ) {
+			System.out.println("Invalid number of arguments provided. Please provide the manifest file location");
+			System.exit(1);
+		}
+		
+		Manifest manifest = Manifest.readManifestFile(args[0]);
+		
+		if (manifest == null ) {
+			System.out.println("Invalid manifest");
+			System.exit(1);
+		}
+		
+		CargoCalculator calculator = new CargoCalculator(manifest);
+		CargoCombo answer = calculator.calculateCargoToDrop();
+		
+		if (answer == null ) {
+			System.out.println("Answer could not be calculated");
+			System.exit(1);
+		}
+		
+		int cost = answer.getTotalCost();
+		System.out.printf("%d\n",cost);
+		System.exit(0);
+		
 	}
 	
 

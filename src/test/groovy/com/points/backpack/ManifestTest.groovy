@@ -11,18 +11,17 @@ class ManifestTest {
 	
 	@Test
 	public void testCreateManifest() {
-		def cargoList = [new Cargo("box", 7, 20)]
-		def manifest = new Manifest(30, cargoList)
+		def cargoCombo = new CargoCombo(new Cargo("box", 7, 20))
+		def manifest = new Manifest(30, cargoCombo)
 		assertEquals(30, manifest.getWeightToLose())
-		assertEquals(cargoList, manifest.getCargoAboardPlane())
+		assertEquals(1, manifest.getCargoAboardPlane().size())
 	}
 	
 	@Test
 	public void testCreateManifestInvalidWeight() {
-		def cargoList = [new Cargo("box", 7, 20)]
-		def manifest = new Manifest(-5, cargoList)
+		def cargoCombo = new CargoCombo(new Cargo("box", 7, 20))
+		def manifest = new Manifest(-5, cargoCombo)
 		assertEquals(0, manifest.getWeightToLose())
-		assertEquals(cargoList, manifest.getCargoAboardPlane())
 	}
 	
 	@Test
